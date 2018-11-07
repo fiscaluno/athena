@@ -122,6 +122,34 @@ func userDelete(service user.UseCase) http.Handler {
 	})
 }
 
+func userAuth() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error auth user"
+
+		type auth struct {
+			ID    int    `json:"id"`
+			Token string `json:"token"`
+		}
+
+		data := auth{
+			ID:    1,
+			Token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2MCwiY3JlYXRlZEF0IjoiMjAxOC0wOC0wMlQxNjozMzoxMS4xNDQ2NDdaIiwidXBkYXRlZEF0IjoiMjAxOC0wOC0wMlQxNjozMzoxMS4xNDQ2NDdaIiwiZGVsZXRlZEF0IjpudWxsLCJmYWNlYm9va0lEIjoiMTIzNDEyMzQifSwiZXhwIjoxNTMzMzE0NzE5LCJpc3MiOiJtdSJ9.on2uZ0WIpdlAitBrGzISZ4tWoSRD5__Vswgl84Yaql8",
+		}
+
+		w.WriteHeader(http.StatusOK)
+		resp := entity.HTTPResp{
+			Code:   http.StatusOK,
+			Result: data,
+		}
+		if err := json.NewEncoder(w).Encode(resp); err != nil {
+			log.Println(err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+	})
+}
+
 //MakeUserHandlers make url handlers
 func MakeUserHandlers(r *mux.Router, n negroni.Negroni, service user.UseCase) {
 	r.Handle("/v1/users", n.With(
@@ -139,4 +167,8 @@ func MakeUserHandlers(r *mux.Router, n negroni.Negroni, service user.UseCase) {
 	r.Handle("/v1/users/{id}", n.With(
 		negroni.Wrap(userDelete(service)),
 	)).Methods("DELETE", "OPTIONS").Name("userDelete")
+
+	r.Handle("/v1/auth", n.With(
+		negroni.Wrap(userAuth()),
+	)).Methods("POST", "OPTIONS").Name("userAuth")
 }
