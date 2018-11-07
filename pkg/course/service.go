@@ -20,6 +20,11 @@ func NewService(r Repository) *Service {
 
 //Store an Course
 func (s *Service) Store(b *entity.Course) (entity.ID, error) {
+	all, err := s.repo.FindAll()
+	if err != nil {
+		return entity.NewID(), err
+	}
+	b.ID = entity.ID(len(all) + 1)
 	return s.repo.Store(b)
 }
 
