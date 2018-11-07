@@ -1,0 +1,11 @@
+{
+    "name": "Athena",
+    "description": "Responsavel por unir  todos os microsserviços do Fiscaluno",
+    "keywords": [
+        "Fiscaluno",
+        "Go",
+        "Golang"
+    ],
+    "website": "http://github.com/fiscaluno/athena",
+    "repository": "http://github.com/fiscaluno/athena"
+}
