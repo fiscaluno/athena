@@ -132,11 +132,11 @@ func MakeReviewHandlers(r *mux.Router, n negroni.Negroni, service review.UseCase
 		negroni.Wrap(reviewAdd(service)),
 	)).Methods("POST", "OPTIONS").Name("reviewAdd")
 
-	r.Handle("/v1/reviews/{id}", n.With(
+	r.Handle("/v1/reviews/{id:[0-9]+}", n.With(
 		negroni.Wrap(reviewFind(service)),
 	)).Methods("GET", "OPTIONS").Name("reviewFind")
 
-	r.Handle("/v1/reviews/{id}", n.With(
+	r.Handle("/v1/reviews/{id:[0-9]+}", n.With(
 		negroni.Wrap(reviewDelete(service)),
 	)).Methods("DELETE", "OPTIONS").Name("reviewDelete")
 }

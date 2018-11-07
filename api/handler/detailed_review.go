@@ -189,6 +189,60 @@ func detailedreviewAverage() http.Handler {
 	})
 }
 
+func detailedreviewType() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		errorMessage := "Error reading detailedreviews"
+
+		type reviewType struct {
+			ID   int    `json:"id"`
+			Type string `json:"type"`
+		}
+
+		var data []*reviewType
+		var err error
+		// name := r.URL.Query().Get("name")
+
+		data = []*reviewType{
+			{
+				ID:   1,
+				Type: "Infrastructure",
+			},
+			{
+				ID:   2,
+				Type: "Professors",
+			},
+			{
+				ID:   3,
+				Type: "Classes",
+			},
+			{
+				ID:   4,
+				Type: "Website",
+			},
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+			return
+		}
+
+		if data == nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(errorMessage))
+			return
+		}
+		resp := entity.HTTPResp{
+			Result: data,
+		}
+		if err := json.NewEncoder(w).Encode(resp); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(errorMessage))
+		}
+	})
+}
+
 //MakeDetailedReviewHandlers make url handlers
 func MakeDetailedReviewHandlers(r *mux.Router, n negroni.Negroni, service detailedreview.UseCase) {
 	r.Handle("/v1/reviews/{review_id:[0-9]+}/details", n.With(
@@ -210,4 +264,8 @@ func MakeDetailedReviewHandlers(r *mux.Router, n negroni.Negroni, service detail
 	r.Handle("/v1/reviews/details/average", n.With(
 		negroni.Wrap(detailedreviewAverage()),
 	)).Methods("GET", "OPTIONS").Name("detailedreviewAverage")
+
+	r.Handle("/v1/reviews/types", n.With(
+		negroni.Wrap(detailedreviewType()),
+	)).Methods("GET", "OPTIONS").Name("detailedreviewType")
 }
