@@ -9,6 +9,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/fiscaluno/athena/api/handler"
 	"github.com/fiscaluno/athena/pkg/course"
+	"github.com/fiscaluno/athena/pkg/detailedreview"
 	"github.com/fiscaluno/athena/pkg/institution"
 	"github.com/fiscaluno/athena/pkg/middleware"
 	"github.com/fiscaluno/athena/pkg/review"
@@ -47,6 +48,11 @@ func Start() {
 	userRepo := user.NewInmemRepository()
 	userService := user.NewService(userRepo)
 	handler.MakeUserHandlers(r, *n, userService)
+
+	// detailed_review
+	detailedReviewRepo := detailedreview.NewInmemRepository()
+	detailedReviewService := detailedreview.NewService(detailedReviewRepo)
+	handler.MakeDetailedReviewHandlers(r, *n, detailedReviewService)
 
 	http.Handle("/", r)
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
