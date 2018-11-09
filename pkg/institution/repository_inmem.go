@@ -62,6 +62,7 @@ func (r *IRepo) Delete(id entity.ID) error {
 	if r.m[id.String()] == nil {
 		return entity.ErrNotFound
 	}
-	r.m[id.String()] = nil
+	var x = entity.Institution{}
+	r.m[id.String()] = &x
 	return nil
 }

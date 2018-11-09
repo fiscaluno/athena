@@ -13,7 +13,7 @@ import (
 
 func institutionIndex(service institution.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		errorMessage := "Error reading institutions"
+
 		var data []*entity.Institution
 		var err error
 		name := r.URL.Query().Get("name")
@@ -26,13 +26,13 @@ func institutionIndex(service institution.UseCase) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 
 		if data == nil {
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 		resp := entity.HTTPResp{
@@ -40,20 +40,20 @@ func institutionIndex(service institution.UseCase) http.Handler {
 		}
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 		}
 	})
 }
 
 func institutionAdd(service institution.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		errorMessage := "Error adding institution"
+
 		var b *entity.Institution
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
 			log.Println(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 
@@ -61,7 +61,7 @@ func institutionAdd(service institution.UseCase) http.Handler {
 		if err != nil {
 			log.Println(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 
@@ -73,7 +73,7 @@ func institutionAdd(service institution.UseCase) http.Handler {
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			log.Println(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 	})
@@ -81,20 +81,20 @@ func institutionAdd(service institution.UseCase) http.Handler {
 
 func institutionFind(service institution.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		errorMessage := "Error reading institution"
+
 		vars := mux.Vars(r)
 		id := vars["id"]
 		data, err := service.Find(entity.StringToID(id))
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 
 		if data == nil {
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 		resp := entity.HTTPResp{
@@ -102,21 +102,21 @@ func institutionFind(service institution.UseCase) http.Handler {
 		}
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 		}
 	})
 }
 
 func institutionDelete(service institution.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		errorMessage := "Error removing institution"
+
 		vars := mux.Vars(r)
 		id := vars["id"]
 		err := service.Delete(entity.StringToID(id))
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(errorMessage))
+			w.Write([]byte(err.Error()))
 			return
 		}
 	})

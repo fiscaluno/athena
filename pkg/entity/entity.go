@@ -9,10 +9,10 @@ type ID uint
 
 // HTTPResp ...
 type HTTPResp struct {
-	Status   string      `json:"status"`
-	Code     int         `json:"code"`
-	Messages []string    `json:"messages"`
-	Result   interface{} `json:"result"`
+	Status   string      `json:"status,omitempty"`
+	Code     int         `json:"code,omitempty"`
+	Messages []string    `json:"messages,omitempty"`
+	Result   interface{} `json:"result,omitempty"`
 }
 
 //ToString convert an ID in a string
