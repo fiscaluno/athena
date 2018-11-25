@@ -35,13 +35,12 @@ func Start() {
 	handler.MakeReviewHandlers(r, *n, reviewService)
 
 	// institution
-	// institutionRepo := institution.NewInmemRepository()
 	institutionRepo := institution.NewAPIRepository("http://aiolia.herokuapp.com", "/institution")
 	institutionService := institution.NewService(institutionRepo)
 	handler.MakeInstitutionHandlers(r, *n, institutionService)
 
 	// course
-	courseRepo := course.NewInmemRepository()
+	courseRepo := course.NewAPIRepository("http://shaka-course.herokuapp.com", "/courses")
 	courseService := course.NewService(courseRepo)
 	handler.MakeCourseHandlers(r, *n, courseService)
 
