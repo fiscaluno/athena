@@ -2,7 +2,7 @@ package entity
 
 //Course data
 type Course struct {
-	ID                  ID        `json:"id,omitempty"`
+	ID                  ID        `json:"course_id,omitempty"`
 	Name                string    `json:"course_name,omitempty"`
 	Type                string    `json:"course_type,omitempty"`
 	AverageRating       float64   `json:"course_average_rating,omitempty"`
