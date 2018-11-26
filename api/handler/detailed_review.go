@@ -140,7 +140,7 @@ func detailedreviewAverage() http.Handler {
 		errorMessage := "Error reading detailedreviews"
 
 		type average struct {
-			ReviewType string  `json:"review_type"`
+			ReviewType string  `json:"description"`
 			Rate       float64 `json:"rate"`
 		}
 
