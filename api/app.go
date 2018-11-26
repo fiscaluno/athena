@@ -29,8 +29,9 @@ func Start() {
 		negroni.HandlerFunc(middleware.Cors),
 		negroni.NewLogger(),
 	)
+
 	//review
-	reviewRepo := review.NewInmemRepository()
+	reviewRepo := review.NewAPIRepository("http://dohko.herokuapp.com", "/reviews")
 	reviewService := review.NewService(reviewRepo)
 	handler.MakeReviewHandlers(r, *n, reviewService)
 

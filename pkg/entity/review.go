@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-//Review data
+//Review entity
 type Review struct {
 	ID            ID      `json:"id"`
 	StudentID     uint    `json:"student_id"`
@@ -12,6 +12,7 @@ type Review struct {
 	Pros          string  `json:"pros"`
 	Cons          string  `json:"cons"`
 	Suggestion    string  `json:"suggestion"`
+	CourseID      uint    `json:"course_id"`
 	CourseInfo    struct {
 		CourseID            uint   `json:"course_id"`
 		CourseType          string `json:"course_type"`
