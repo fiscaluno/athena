@@ -49,6 +49,11 @@ func (r *APIRepo) FindAll() ([]*entity.Course, error) {
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&i)
 
+	for cont, _ := range i {
+		i[cont].MonthlyValueRange = []float64{400, 2000}
+		i[cont].TimeToGraduateRange = []int{3, 5}
+		i[cont].Periods = []string{"nightly"}
+	}
 	return i, nil
 }
 
