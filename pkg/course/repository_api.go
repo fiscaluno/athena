@@ -2,6 +2,7 @@ package course
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/fiscaluno/athena/pkg/entity"
@@ -34,8 +35,20 @@ func (r *APIRepo) Find(id entity.ID) (*entity.Course, error) {
 
 //Search Courses
 func (r *APIRepo) Search(query string) ([]*entity.Course, error) {
+	log.Println(query)
 	var i []*entity.Course
+	resp, err := http.Get(r.uri + r.path + "?" + query)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&i)
 
+	for cont, _ := range i {
+		i[cont].MonthlyValueRange = []float64{400, 2000}
+		i[cont].TimeToGraduateRange = []int{3, 5}
+		i[cont].Periods = []string{"nightly"}
+	}
 	return i, nil
 }
 

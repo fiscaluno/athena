@@ -17,11 +17,12 @@ func courseIndex(service course.UseCase) http.Handler {
 		var data []*entity.Course
 		var err error
 		name := r.URL.Query().Get("name")
+		institution := r.URL.Query().Get("institutionId")
 		switch {
-		case name == "":
+		case name == "" && institution == "":
 			data, err = service.FindAll()
 		default:
-			data, err = service.Search(name)
+			data, err = service.Search(r.URL.Query().Encode())
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
