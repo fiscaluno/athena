@@ -59,7 +59,12 @@ func (r *APIRepo) Find(id entity.ID) (*entity.Review, error) {
 //Search Reviews
 func (r *APIRepo) Search(query string) ([]*entity.Review, error) {
 	var i []*entity.Review
-
+	resp, err := http.Get(r.uri + r.path + "?" + query)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&i)
 	return i, nil
 }
 

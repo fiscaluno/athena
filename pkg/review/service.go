@@ -1,8 +1,6 @@
 package review
 
 import (
-	"strings"
-
 	"github.com/fiscaluno/athena/pkg/entity"
 )
 
@@ -35,7 +33,7 @@ func (s *Service) Find(id entity.ID) (*entity.Review, error) {
 
 //Search Reviews
 func (s *Service) Search(query string) ([]*entity.Review, error) {
-	return s.repo.Search(strings.ToLower(query))
+	return s.repo.Search(query)
 }
 
 //FindAll Reviews

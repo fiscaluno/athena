@@ -16,12 +16,12 @@ func reviewIndex(service review.UseCase) http.Handler {
 		errorMessage := "Error reading reviews"
 		var data []*entity.Review
 		var err error
-		name := r.URL.Query().Get("name")
+		query := r.URL.Query().Encode()
 		switch {
-		case name == "":
+		case query == "":
 			data, err = service.FindAll()
 		default:
-			data, err = service.Search(name)
+			data, err = service.Search(query)
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err != nil && err != entity.ErrNotFound {
