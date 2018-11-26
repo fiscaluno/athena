@@ -1,8 +1,6 @@
 package course
 
 import (
-	"strings"
-
 	"github.com/fiscaluno/athena/pkg/entity"
 )
 
@@ -35,7 +33,7 @@ func (s *Service) Find(id entity.ID) (*entity.Course, error) {
 
 //Search Courses
 func (s *Service) Search(query string) ([]*entity.Course, error) {
-	return s.repo.Search(strings.ToLower(query))
+	return s.repo.Search(query)
 }
 
 //FindAll Courses

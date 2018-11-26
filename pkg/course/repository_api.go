@@ -2,7 +2,6 @@ package course
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/fiscaluno/athena/pkg/entity"
@@ -35,7 +34,6 @@ func (r *APIRepo) Find(id entity.ID) (*entity.Course, error) {
 
 //Search Courses
 func (r *APIRepo) Search(query string) ([]*entity.Course, error) {
-	log.Println(query)
 	var i []*entity.Course
 	resp, err := http.Get(r.uri + r.path + "?" + query)
 	if err != nil {
