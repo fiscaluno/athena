@@ -3,6 +3,8 @@ package review
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/fiscaluno/athena/pkg/entity"
 )
@@ -23,7 +25,29 @@ func NewAPIRepository(u, p string) *APIRepo {
 
 // Store a Review
 func (r *APIRepo) Store(a *entity.Review) (entity.ID, error) {
-	return entity.NewID(), nil
+
+	a.CourseID = a.CourseInfo.CourseID
+	payload, err := json.Marshal(a)
+	if err != nil {
+		return entity.NewID(), err
+	}
+
+	req, _ := http.NewRequest("POST", r.uri+r.path, strings.NewReader(string(payload)))
+
+	req.Header.Add("Content-Type", "application/json")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	var resp struct {
+		Body struct {
+			ID int `json:"id"`
+		} `json:"Body"`
+	}
+
+	defer res.Body.Close()
+	json.NewDecoder(res.Body).Decode(&resp)
+
+	return entity.StringToID(strconv.Itoa(resp.Body.ID)), nil
 }
 
 //Find a Review
